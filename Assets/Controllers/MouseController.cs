@@ -4,8 +4,21 @@ using UnityEngine;
 
 public class MouseController : MonoBehaviour {
 
+	public static MouseController Instance { get; set; }
 
 	public GameObject selectCursorPrefab;
+	public enum MouseMode {Constructor, Commander};
+
+	MouseMode mode = MouseMode.Commander;
+
+	public MouseMode Mode {
+		get {
+			return mode;
+		}
+		set {
+			mode = value;
+		}
+	}
 
 	Vector3 lastFramePosition;
 	Vector3 dragStartPosition;
@@ -14,23 +27,28 @@ public class MouseController : MonoBehaviour {
 	List<GameObject> dragPrevGO;
 
 	// Use this for initialization
-	void Start () {
+	void Start() {
 		dragPrevGO = new List<GameObject> ();
-
 		//SimplePool.Preload (selectCursorPrefab, 100);
+		if (Instance != null) {
+			Debug.LogError ("cannot be 2 worldcontrollers");
+		}
+		Instance = this;
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void Update() {
 
-		currentFramePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+		currentFramePosition = Camera.main.ScreenToWorldPoint (Input.mousePosition);
 		currentFramePosition.z = 0;
 
 		//what tile is under the mouse
-		Tile tileUnderMouse = WorldController.Instance.GetTileAtWorldCoord(currentFramePosition);
+		Tile tileUnderMouse = WorldController.Instance.GetTileAtWorldCoord (currentFramePosition);
 
-		UpdateDragging ();
-		UpdateCameraMovement ();
+		if (mode == MouseMode.Constructor) {
+			UpdateDragging ();
+		}
+		UpdateCameraMovement();
 
 		//mouse dragging view moving
 		lastFramePosition = Camera.main.ScreenToWorldPoint (Input.mousePosition);
@@ -40,12 +58,11 @@ public class MouseController : MonoBehaviour {
 	}
 
 	//main mouse movement
-	void UpdateCameraMovement(){
+	void UpdateCameraMovement() {
 		if (Input.GetMouseButton(1) || Input.GetMouseButton(2)) {
 			Vector3 diff = lastFramePosition - currentFramePosition;
 			//Debug.Log (Camera.main.S);
 			var possition = Camera.main.transform.position.x;
-			Debug.Log (possition);
 			lastFramePosition.z = 0;
 			Camera.main.transform.Translate(diff);
 		}
@@ -56,7 +73,7 @@ public class MouseController : MonoBehaviour {
 	}
 
 	//mouse dragging action
-	void UpdateDragging(){
+	void UpdateDragging() {
 		if (Input.GetMouseButtonDown(0)) {
 			dragStartPosition = currentFramePosition;
 		}

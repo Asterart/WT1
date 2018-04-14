@@ -34,7 +34,7 @@ public class WorldController : MonoBehaviour {
 
 				GameObject tile_gameobj = new GameObject ();
 				tile_gameobj.name = "Tile_" + x + "_" + y;
-				tile_gameobj.transform.position = new Vector3 (tile_data.X, tile_data.Y, 0);
+				tile_gameobj.transform.position = new Vector3 (tile_data.pos_X, tile_data.pos_Y, 0);
 				tile_gameobj.transform.SetParent (this.transform, true);
 				//add sprite render for empty tiles
 				tile_gameobj.AddComponent<SpriteRenderer> ();

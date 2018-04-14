@@ -32,31 +32,31 @@ public class Tile {
 		}
 	}
 
-	LooseObj looseObj;
-	InstalledObj installedObj;
+	Item Item;
+	Construction Construction;
 
 	World World;
 
-	int x;
+	int pos_x;
 
-	public int X {
+	public int pos_X {
 		get {
-			return x;
+			return pos_x;
 		}
 	}
 
-	int y;
+	int pos_y;
 
-	public int Y {
+	public int pos_Y {
 		get {
-			return y;
+			return pos_y;
 		}
 	}
 
-	public Tile(World World, int x, int y){
+	public Tile(World World, int pos_x, int pos_y){
 		this.World = World;
-		this.x = x;
-		this.y = y;
+		this.pos_x = pos_x;
+		this.pos_y = pos_y;
 	}
 
 	public void TileTypeChangedCallback(Action<Tile> callback){
